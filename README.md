@@ -103,6 +103,44 @@ docker compose exec node npm run build
 docker compose exec node npm install [package]
 ```
 
+## かんたん操作 (wp.sh)
+
+`./wp.sh`で主要な操作をシンプルに実行できる。
+
+```bash
+./wp.sh start          # 環境の起動
+./wp.sh stop           # 環境の停止
+
+./wp.sh plugin-add contact-form-7    # プラグイン追加
+./wp.sh plugin-remove contact-form-7 # プラグイン削除
+./wp.sh plugin-list                  # プラグイン一覧
+
+./wp.sh db-export      # DB保存
+./wp.sh db-import      # DB取り込み
+
+./wp.sh log            # エラーログ表示
+./wp.sh help           # コマンド一覧
+```
+
+### プラグインの追加手順
+
+1. プラグイン名を確認する（WordPress公式サイトのURLスラッグ）
+   ```
+   https://wordpress.org/plugins/classic-editor/
+                                 ^^^^^^^^^^^^^^ ← これがプラグイン名
+   ```
+
+2. インストール
+   ```bash
+   ./wp.sh plugin-add classic-editor
+   ```
+
+3. `init_start.sh`の「プラグインのインストール」セクションに追記
+   ```bash
+   docker compose run --rm wpcli wp plugin install classic-editor --activate
+   ```
+   これにより新しい開発者が`./init_start.sh`を実行した時にも同じプラグインが入る。
+
 ## プロジェクト構成
 
 ```
@@ -295,6 +333,62 @@ SQLダンプで共有する。
 
 `db/dump.sql`はGit管理対象。コーポレートサイト規模であれば容量は問題ない。
 ただしコミットの度にダンプ全体が差分記録されるため、区切りのよいタイミング（ページ追加後、メニュー変更後など）でエクスポートする。
+
+### バックアップと復元
+
+`./db/import.sh`実行時に`db/backup/`へタイムスタンプ付きバックアップが自動作成される。
+復元が必要な場合は以下を実行する。
+
+```bash
+docker compose exec -T mysql mysql \
+  -u wp_user -pwp_password \
+  takahashi_womens < db/backup/backup_20260303_123456.sql
+```
+
+`db/backup/`はGit管理対象外。
+
+## Git管理ルール
+
+### 開発フロー
+
+```
+1. GitHubでissueを起票
+2. issueからブランチを作成
+3. 開発・コミット
+4. Pull Requestを作成
+5. mainにマージ
+```
+
+### ブランチ命名規則
+
+```
+feature/issue-{番号}
+```
+
+例: `feature/issue-12`
+
+### コミットメッセージ
+
+```
+[種類] 変更内容
+```
+
+| 種類 | 用途 |
+|------|------|
+| [機能追加] | 新しい機能の追加 |
+| [修正] | バグ修正 |
+| [デザイン] | 見た目の変更 |
+| [リファクタリング] | コード整理（動作変更なし） |
+| [設定] | 設定・環境の変更 |
+| [ドキュメント] | ドキュメントの更新 |
+
+例:
+```
+[修正] トップページのレイアウト崩れを修正
+[機能追加] お問い合わせフォームの追加
+[デザイン] ヘッダーナビゲーションの色変更
+[設定] classic-editorプラグインの追加
+```
 
 ## デプロイ
 

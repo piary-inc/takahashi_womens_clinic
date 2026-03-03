@@ -31,6 +31,10 @@ docker compose run --rm wpcli wp rewrite structure '/%postname%/'
 docker compose run --rm wpcli wp option update blogdescription '高橋ウィメンズクリニック'
 
 echo ""
+echo "=== プラグインのインストール ==="
+docker compose run --rm wpcli wp plugin install classic-editor --activate
+
+echo ""
 echo "=== ログディレクトリの権限設定 ==="
 chmod 777 logs
 

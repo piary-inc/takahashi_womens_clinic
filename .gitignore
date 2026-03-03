@@ -18,6 +18,9 @@ Thumbs.db
 # WordPress uploads (Docker volume)
 uploads/
 
+# DB backup
+db/backup/
+
 # Logs
 logs/
 *.log
