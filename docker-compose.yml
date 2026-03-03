@@ -1,0 +1,116 @@
+services:
+  # WordPress本体 (Apache内蔵)
+  wordpress:
+    build:
+      context: ./docker/wordpress
+      dockerfile: Dockerfile
+    container_name: tw_wordpress
+    restart: unless-stopped
+    ports:
+      - "${WP_PORT:-8080}:80"
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DEBUG: "true"
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_DEBUG_LOG', '/var/log/wordpress/debug.log');
+        define('WP_DEBUG_DISPLAY', true);
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./themes/takahashi-womens:/var/www/html/wp-content/themes/takahashi-womens
+      - ./logs:/var/log/wordpress
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - tw_network
+
+  # MySQL データベース
+  mysql:
+    image: mysql:8.0
+    container_name: tw_mysql
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tw_network
+
+  # phpAdminer (DB管理ツール)
+  phpadminer:
+    image: adminer
+    container_name: tw_phpadminer
+    restart: unless-stopped
+    ports:
+      - "${ADMINER_PORT:-8081}:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - tw_network
+
+  # MailHog (メールテスト)
+  mailhog:
+    image: mailhog/mailhog
+    container_name: tw_mailhog
+    restart: unless-stopped
+    ports:
+      - "${MAILHOG_SMTP_PORT:-1025}:1025"
+      - "${MAILHOG_UI_PORT:-8025}:8025"
+    networks:
+      - tw_network
+
+  # WP-CLI
+  wpcli:
+    image: wordpress:cli-php8.4
+    container_name: tw_wpcli
+    user: "33:33"
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./themes/takahashi-womens:/var/www/html/wp-content/themes/takahashi-womens
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - tw_network
+
+  # Node.js (Vite開発サーバー)
+  node:
+    image: node:20-alpine
+    container_name: tw_node
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "${VITE_PORT:-5173}:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./themes/takahashi-womens:/app
+    networks:
+      - tw_network
+
+volumes:
+  wordpress_data:
+  mysql_data:
+
+networks:
+  tw_network:
+    driver: bridge

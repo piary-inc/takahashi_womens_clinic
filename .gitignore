@@ -1,0 +1,24 @@
+# Dependencies
+themes/takahashi-womens/node_modules/
+
+# Build output
+themes/takahashi-womens/dist/
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# WordPress uploads (Docker volume)
+uploads/
+
+# Logs
+logs/
+*.log
+npm-debug.log*

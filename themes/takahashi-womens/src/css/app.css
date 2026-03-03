@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@import "./layout/header.css";
+
+@theme {
+  --font-family-body: "Noto Sans JP", sans-serif;
+}
+
+/* Alpine.js x-cloak: 初期化前に要素を非表示 */
+[x-cloak] {
+  display: none !important;
+}
