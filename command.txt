@@ -1,0 +1,12 @@
+./wp.sh start          # 環境の起動
+./wp.sh stop           # 環境の停止
+
+./wp.sh plugin-add contact-form-7    # プラグイン追加
+./wp.sh plugin-remove contact-form-7 # プラグイン削除
+./wp.sh plugin-list                  # プラグイン一覧
+
+./wp.sh db-export      # DB保存
+./wp.sh db-import      # DB取り込み
+
+./wp.sh log            # エラーログ表示
+./wp.sh help           # コマンド一覧
