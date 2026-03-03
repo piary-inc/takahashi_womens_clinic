@@ -8,6 +8,17 @@ if [ ! -f db/dump.sql ]; then
   exit 1
 fi
 
+# インポート前にバックアップを作成
+BACKUP_FILE="db/backup/backup_$(date +%Y%m%d_%H%M%S).sql"
+mkdir -p db/backup
+
+docker compose exec mysql mysqldump \
+  -u wp_user -pwp_password \
+  takahashi_womens > "$BACKUP_FILE"
+
+echo "バックアップ作成: $BACKUP_FILE"
+
+# インポート実行
 docker compose exec -T mysql mysql \
   -u wp_user -pwp_password \
   takahashi_womens < db/dump.sql
