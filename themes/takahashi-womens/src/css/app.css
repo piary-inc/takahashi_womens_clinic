@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./layout/header.css";
+@import "./layout/footer.css";
 
 @theme {
   --font-family-body: "Noto Sans JP", sans-serif;
