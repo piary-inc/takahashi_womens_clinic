@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "./layout/header.css";
 @import "./layout/footer.css";
-
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap');
 @theme {
   --font-family-body: "Noto Sans JP", sans-serif;
 }
@@ -10,3 +10,65 @@
 [x-cloak] {
   display: none !important;
 }
+
+/* 色・余白など単機能のスタイル */
+@layer utilities { 
+  .content-inner {
+    width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .text-main-pink {
+    color: #EBA3A3;
+  }
+  .border-main-pink {
+    border-color: #EBA3A3;
+  }
+  .shadow-main-pink {
+    box-shadow: 4px 4px 0 #f5e7e4;
+  }
+  .bg-main-pink01 {
+    background-color: #FEF2F0;
+  }
+  .bg-main-pink02 {
+    background-color: #FEF2F0;
+  }
+  .badge-staff {
+    background-color: #fdf0f0;
+    clip-path: ellipse(50% 100% at 50% 0%);
+    padding: 20px 60px 40px;
+    min-width: 300px;
+  }
+  .marker-pink::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background-color: #EBA3A3;
+    opacity: 0.9;
+    z-index: -1;
+  }
+  .border-dot {
+    background-image: radial-gradient(circle, #555555 0px, transparent 2px);
+    background-size: 7px 7px;
+    background-repeat: repeat-x;
+    background-position: bottom;
+  }
+  .btn-arrow::after {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-top: 1px solid #EBA3A3;
+    border-right: 1px solid #EBA3A3;
+    transform: rotate(45deg);
+    vertical-align: middle;
+    position: absolute;
+    top: calc( (100% - 10px) / 2);
+    right: 5%;
+  }
+}
+/* ボタン、カードなど部品のスタイル */
+@layer components {}

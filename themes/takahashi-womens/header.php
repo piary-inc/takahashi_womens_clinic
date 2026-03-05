@@ -18,13 +18,19 @@
 <header class="bg-white shadow-sm" x-data="{ mobileMenu: false }">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-16">
-            <!-- サイトロゴ -->
-            <a href="<?php echo esc_url(home_url('/')); ?>" class="text-xl font-bold text-gray-900">
-                <?php bloginfo('name'); ?>
-            </a>
-
+            <div class="flex items-center justify-between w-[30%]">
+                <!-- サイトロゴ -->
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="text-xl font-bold text-gray-900">
+                    <?php bloginfo('name'); ?>
+                </a>
+                <p class="font-bold text-3xl">採用ページ</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="" class="text-main-pink font-medium text-lg border-2 border-main-pink px-6 py-2 rounded-full shadow-main-pink duration-300 after:content-['▶'] after:ml-3 after:text-[8px] after:relative after:top-[-4px]">カジュアル面談</a>
+                <a href="" class="text-main-pink font-medium text-lg border-2 border-main-pink px-6 py-2 rounded-full shadow-main-pink duration-300 after:content-['▶'] after:ml-3 after:text-[8px] after:relative after:top-[-4px]">応募はこちらから</a>
+            </div>
             <!-- ナビゲーション (デスクトップ) -->
-            <nav class="hidden md:block">
+            <!-- <nav class="hidden md:block">
                 <?php
                 wp_nav_menu([
                     'theme_location' => 'primary',
@@ -34,7 +40,7 @@
                     'items_wrap'     => '<ul class="%2$s">%3$s</ul>',
                 ]);
                 ?>
-            </nav>
+            </nav> -->
 
             <!-- ハンバーガーメニュー (モバイル) -->
             <button
