@@ -15,17 +15,17 @@
 <body <?php body_class('antialiased'); ?>>
 <?php wp_body_open(); ?>
 
-<header class="bg-white shadow-sm" x-data="{ mobileMenu: false }">
+<header class="bg-white shadow-sm fixed top-0 left-0 w-full z-50" x-data="{ mobileMenu: false }">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-16">
-            <div class="flex items-center justify-between w-[30%]">
+            <div class="flex items-center justify-between ">
                 <!-- サイトロゴ -->
                 <a href="<?php echo esc_url(home_url('/')); ?>" class="text-xl font-bold text-gray-900">
                     <?php bloginfo('name'); ?>
                 </a>
-                <p class="font-bold text-3xl">採用ページ</p>
+                <p class="hidden md:block lg:font-bold text-3xl ml-4">採用ページ</p>
             </div>
-            <div class="flex items-center gap-4">
+            <div class="hidden lg:flex items-center gap-4">
                 <a href="" class="text-main-pink font-medium text-lg border-2 border-main-pink px-6 py-2 rounded-full shadow-main-pink duration-300 after:content-['▶'] after:ml-3 after:text-[8px] after:relative after:top-[-4px]">カジュアル面談</a>
                 <a href="" class="text-main-pink font-medium text-lg border-2 border-main-pink px-6 py-2 rounded-full shadow-main-pink duration-300 after:content-['▶'] after:ml-3 after:text-[8px] after:relative after:top-[-4px]">応募はこちらから</a>
             </div>
